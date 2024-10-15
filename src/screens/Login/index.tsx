@@ -5,6 +5,8 @@ import * as Yup from 'yup';
 import TextInputWithForm from '../components/TextInputWithForm';
 import colors from '../../colors';
 import styled from 'styled-components/native';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackNavigationProp, RootStackParamList } from '../../types/routes';
 
 const Container = styled(View)`
   padding: 20px;
@@ -16,23 +18,25 @@ const InputContainer = styled(View)`
   margin-bottom: 20px;
 `;
 
-const Button = styled(TouchableOpacity)<{ isPrimary?: boolean }>`
+const Button = styled(TouchableOpacity) <{ isPrimary?: boolean }>`
   height: 55px;
   background-color: ${({ isPrimary }) => (isPrimary ? colors.primary : 'transparent')};
-  border: ${({ isPrimary }) => (isPrimary ? 'none' : `2px solid ${colors.text}`)};
+  border: ${({ isPrimary }) => (isPrimary ? 'none' : `1px solid ${colors.text}`)};
   border-radius: 5px;
   justify-content: center;
   align-items: center;
   margin-bottom: 5px;
 `;
 
-const ButtonText = styled(Text)<{ isPrimary?: boolean }>`
+const ButtonText = styled(Text) <{ isPrimary?: boolean }>`
   font-size: 15px;
   color: ${({ isPrimary }) => (isPrimary ? colors.background : colors.text)};
   font-weight: bold;
 `;
 
 const LoginScreen = () => {
+  const navigation = useNavigation<RootStackNavigationProp>();
+
   const initialValues = {
     username: '',
     password: '',
@@ -76,7 +80,7 @@ const LoginScreen = () => {
               <Button isPrimary onPress={() => handleSubmit()}>
                 <ButtonText isPrimary>Sign</ButtonText>
               </Button>
-              <Button onPress={() => handleSubmit()}>
+              <Button onPress={() => navigation.navigate('CreateUser')}>
                 <ButtonText>Create account</ButtonText>
               </Button>
             </View>

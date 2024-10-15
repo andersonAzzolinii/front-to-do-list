@@ -3,22 +3,25 @@ import { NavigationContainer } from '@react-navigation/native';
 import LoginScreen from './src/screens/Login';
 import CreateUser from './src/screens/CreateUser';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { RootStackParamList } from './src/types/routes';
 
-const Stack = createNativeStackNavigator(); // Define o tipo para o Stack Navigator
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
+
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Login"
           component={LoginScreen}
-          options={{ headerShown: false }}
+          options={{ title: 'Login' }}
         />
         <Stack.Screen
           name="CreateUser"
           component={CreateUser}
-          options={{ title: 'Criar Usuário' }}
+          options={{ title: 'New user' }}
         />
       </Stack.Navigator>
     </NavigationContainer>
