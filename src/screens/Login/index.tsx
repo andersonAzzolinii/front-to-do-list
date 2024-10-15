@@ -7,6 +7,7 @@ import colors from '../../colors';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp, RootStackParamList } from '../../types/routes';
+import { login } from '../../services/auth';
 
 const Container = styled(View)`
   padding: 20px;
@@ -50,8 +51,12 @@ const LoginScreen = () => {
       .required('Password is required'),
   });
 
-  const handleSubmit = (values: { username: string; password: string }) => {
-    console.log('Valores enviados:', values);
+  const onSubmit = async (values: { username: string; password: string }) => {
+    const { data } = await login(values)
+    if (data.token) {
+      return console.log(data.token)
+    }
+    console.log(data.message)
   };
 
   return (
@@ -59,7 +64,7 @@ const LoginScreen = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={handleSubmit}
+        onSubmit={onSubmit}
       >
         {({ handleSubmit }) => (
           <>

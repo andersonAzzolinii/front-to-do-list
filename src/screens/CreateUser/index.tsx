@@ -7,6 +7,7 @@ import colors from '../../colors';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../types/routes';
+import { createUser } from '../../services/userService';
 
 const Container = styled(View)`
   padding: 20px;
@@ -34,7 +35,7 @@ const ButtonText = styled(Text) <{ isPrimary?: boolean }>`
   font-weight: bold;
 `;
 
-const LoginScreen = () => {
+const CreateScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
 
   const initialValues = {
@@ -50,8 +51,13 @@ const LoginScreen = () => {
       .required('Password is required'),
   });
 
-  const onSubmit = (values: { username: string; password: string }) => {
-    console.log('Valores enviados:', values);
+  const onSubmit = async (values: { username: string; password: string }) => {
+    const { data } = await createUser(values)
+    if (data.data) {
+      console.log('Usuario criado com sucesso')
+      navigation.goBack()
+    }
+    console.log(data.message)
   };
 
   return (
@@ -88,4 +94,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default CreateScreen;
