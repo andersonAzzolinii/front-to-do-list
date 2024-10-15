@@ -15,7 +15,7 @@ const Container = styled(View)`
   justifyContent:center;
 `;
 
-const StyledTextInput = styled(TextInput) <{ hasError: boolean }>`
+const StyledTextInput = styled(TextInput)<{ hasError: boolean }>`
   border-width: 1px;
   border-color: ${({ hasError }) => (hasError ? colors.error : colors.border)};
 `;
@@ -23,7 +23,7 @@ const StyledTextInput = styled(TextInput) <{ hasError: boolean }>`
 const ErrorText = styled(Text)`
   color: red;
   font-size: 14px;
-  margin-bottom:5px
+  margin-bottom:5px;
 `;
 
 const Label = styled(Text)`
@@ -37,9 +37,10 @@ const TextInputWithForm: React.FC<TextInputWithFormProps> = ({ label, name, styl
     <Container style={style}>
       <Label>{label}</Label>
       <StyledTextInput
-        {...field}
         {...props}
+        value={field.value}
         onChangeText={(text) => helpers.setValue(text)}
+        onBlur={() => helpers.setTouched(true)}
         secureTextEntry={secureTextEntry}
         hasError={meta.touched && !!meta.error}
       />

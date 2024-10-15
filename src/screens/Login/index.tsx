@@ -1,15 +1,13 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import TextInputWithForm from '../components/TextInputWithForm';
 import colors from '../../colors';
 import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackNavigationProp, RootStackParamList } from '../../types/routes';
-import { login } from '../../services/auth';
-import { useNotification } from '../../contexts/NotificationContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { RootStackNavigationProp, } from '../../types/routes';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Container = styled(View)`
   padding: 20px;
@@ -39,8 +37,7 @@ const ButtonText = styled(Text) <{ isPrimary?: boolean }>`
 
 const LoginScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-  const { notify } = useNotification()
-
+  const { signIn } = useAuth()
   const initialValues = {
     username: '',
     password: '',
@@ -55,13 +52,12 @@ const LoginScreen = () => {
   });
 
   const onSubmit = async (values: { username: string; password: string }) => {
-    const { data } = await login(values)
-    if (data.token) {
-      await AsyncStorage.setItem('authToken', data.token);
-      navigation.replace('Home')
-      return
+    try {
+      await signIn(values.username, values.password)
+      return navigation.replace('Home')
+    } catch (error) {
+      console.error(error)
     }
-    notify('error', data.message, 2000)
   };
 
   return (

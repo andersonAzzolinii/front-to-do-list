@@ -1,9 +1,22 @@
-import { Text, View } from "react-native";
+import React from "react";
+import { ActivityIndicator } from "react-native";
+import styled from "styled-components/native";
 
 const LoadingComponent = () => (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text>Carregando...</Text>
-  </View>
+  <Container>
+    <StyledActivityIndicator size="large" color="#0000ff" />
+  </Container>
 );
 
-export default LoadingComponent
+const Container = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledActivityIndicator = styled(ActivityIndicator)`
+  width: 150px;
+  height: 150px;
+`;
+
+export default LoadingComponent;

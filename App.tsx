@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import LoginScreen from './src/screens/Login';
 import LoadingComponent from './src/screens/components/Loading';
-import CreateUser from './src/screens/CreateUser';
 import Home from './src/screens/Home';
+import LoginScreen from './src/screens/Login';
+import CreateScreen from './src/screens/CreateUser';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { RootStackParamList } from './src/types/routes'
+import { RootStackParamList } from './src/types/routes';
 import { NotificationProvider } from "./src/contexts/NotificationContext";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthProvider } from './src/contexts/AuthContext';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-export default function App() {
+const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -24,34 +25,34 @@ export default function App() {
   }, []);
 
   if (isLoggedIn === null) {
-    return <LoadingComponent />; 
+    return <LoadingComponent />;
   }
 
   return (
-    <NotificationProvider >
+    <NotificationProvider>
       <NavigationContainer>
-        <Stack.Navigator >
-          {isLoggedIn ? (
+        <AuthProvider>
+          <Stack.Navigator initialRouteName={isLoggedIn ? 'Home' : 'Login'}>
             <Stack.Screen
               name="Home"
               component={Home}
               options={{ title: 'Home' }}
             />
-          ) : (
             <Stack.Screen
               name="Login"
               component={LoginScreen}
               options={{ title: 'Login' }}
             />
-          )}
-          <Stack.Screen
-            name="CreateUser"
-            component={CreateUser}
-            options={{ title: 'New user' }}
-          />
-
-        </Stack.Navigator>
+            <Stack.Screen
+              name="CreateUser"
+              component={CreateScreen}
+              options={{ title: 'New user' }}
+            />
+          </Stack.Navigator>
+        </AuthProvider>
       </NavigationContainer>
     </NotificationProvider>
   );
-}
+};
+
+export default App;
