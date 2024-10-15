@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp, RootStackParamList } from '../../types/routes';
 import { login } from '../../services/auth';
 import { useNotification } from '../../contexts/NotificationContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Container = styled(View)`
   padding: 20px;
@@ -39,7 +40,7 @@ const ButtonText = styled(Text) <{ isPrimary?: boolean }>`
 const LoginScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const { notify } = useNotification()
-  
+
   const initialValues = {
     username: '',
     password: '',
@@ -56,7 +57,9 @@ const LoginScreen = () => {
   const onSubmit = async (values: { username: string; password: string }) => {
     const { data } = await login(values)
     if (data.token) {
-      return console.log(data.token)
+      await AsyncStorage.setItem('authToken', data.token);
+      navigation.replace('Home')
+      return
     }
     notify('error', data.message, 2000)
   };
