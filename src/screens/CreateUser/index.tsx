@@ -8,6 +8,7 @@ import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp } from '../../types/routes';
 import { createUser } from '../../services/userService';
+import { useNotification } from '../../contexts/NotificationContext';
 
 const Container = styled(View)`
   padding: 20px;
@@ -37,6 +38,7 @@ const ButtonText = styled(Text) <{ isPrimary?: boolean }>`
 
 const CreateScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
+  const { notify } = useNotification()
 
   const initialValues = {
     username: '',
@@ -54,10 +56,10 @@ const CreateScreen = () => {
   const onSubmit = async (values: { username: string; password: string }) => {
     const { data } = await createUser(values)
     if (data.data) {
-      console.log('Usuario criado com sucesso')
-      navigation.goBack()
+      notify('success', data.message, 2000)
+      return navigation.replace('Login')
     }
-    console.log(data.message)
+    notify('error', data.message, 2000)
   };
 
   return (

@@ -8,6 +8,7 @@ import styled from 'styled-components/native';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp, RootStackParamList } from '../../types/routes';
 import { login } from '../../services/auth';
+import { useNotification } from '../../contexts/NotificationContext';
 
 const Container = styled(View)`
   padding: 20px;
@@ -37,7 +38,8 @@ const ButtonText = styled(Text) <{ isPrimary?: boolean }>`
 
 const LoginScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
-
+  const { notify } = useNotification()
+  
   const initialValues = {
     username: '',
     password: '',
@@ -56,7 +58,7 @@ const LoginScreen = () => {
     if (data.token) {
       return console.log(data.token)
     }
-    console.log(data.message)
+    notify('error', data.message, 2000)
   };
 
   return (
