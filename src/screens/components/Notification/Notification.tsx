@@ -1,5 +1,4 @@
-// Notification.tsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Animated, Easing } from "react-native";
 import styled from "styled-components/native";
 
@@ -15,12 +14,12 @@ const Notification: React.FC<NotificationProps> = ({
   duration = 1000,
 }) => {
   const translateY = new Animated.Value(-100);
-  const progressBarWidth = new Animated.Value(1); // Usado para a largura da barra de progresso
+  const progressBarWidth = new Animated.Value(1);
 
   useEffect(() => {
     Animated.timing(translateY, {
       toValue: 0,
-      duration: 500,
+      duration: 200,
       easing: Easing.ease,
       useNativeDriver: true,
     }).start();
@@ -34,8 +33,8 @@ const Notification: React.FC<NotificationProps> = ({
 
     const hideNotification = setTimeout(() => {
       Animated.timing(translateY, {
-        toValue: -100,
-        duration: 500,
+        toValue: -450,
+        duration: 200,
         easing: Easing.ease,
         useNativeDriver: true,
       }).start();
@@ -45,7 +44,6 @@ const Notification: React.FC<NotificationProps> = ({
   }, [translateY, duration, progressBarWidth]);
 
   const getBackgroundColor = () => {
-    console.log(type)
     switch (type) {
       case "success":
         return "green";

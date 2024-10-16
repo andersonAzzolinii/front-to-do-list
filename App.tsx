@@ -16,13 +16,14 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const checkToken = async () => {
-      const token = await AsyncStorage.getItem('authToken');
-      token ? setIsLoggedIn(true) : setIsLoggedIn(false);
-    };
-
     checkToken();
   }, []);
+  
+  const checkToken = async () => {
+    const user = await AsyncStorage.getItem('user');
+    const token = await AsyncStorage.getItem('authToken');
+    (token && user) ? setIsLoggedIn(true) : setIsLoggedIn(false);
+  };
 
   if (isLoggedIn === null) {
     return <LoadingComponent />;

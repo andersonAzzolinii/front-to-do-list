@@ -9,31 +9,6 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackNavigationProp, } from '../../types/routes';
 import { useAuth } from '../../contexts/AuthContext';
 
-const Container = styled(View)`
-  padding: 20px;
-  flex: 1;
-  justify-content: center;
-`;
-
-const InputContainer = styled(View)`
-  margin-bottom: 20px;
-`;
-
-const Button = styled(TouchableOpacity) <{ isPrimary?: boolean }>`
-  height: 55px;
-  background-color: ${({ isPrimary }) => (isPrimary ? colors.primary : 'transparent')};
-  border: ${({ isPrimary }) => (isPrimary ? 'none' : `1px solid ${colors.text}`)};
-  border-radius: 5px;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 5px;
-`;
-
-const ButtonText = styled(Text) <{ isPrimary?: boolean }>`
-  font-size: 15px;
-  color: ${({ isPrimary }) => (isPrimary ? colors.background : colors.text)};
-  font-weight: bold;
-`;
 
 const LoginScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
@@ -97,4 +72,29 @@ const LoginScreen = () => {
   );
 };
 
+const Container = styled(View)`
+  padding: 20px;
+  flex: 1;
+  justify-content: center;
+`;
+
+const InputContainer = styled(View)`
+  margin-bottom: 20px;
+`;
+
+const Button = styled(TouchableOpacity) <{ isPrimary?: boolean }>`
+  height: 55px;
+  background-color: ${({ isPrimary }) => (isPrimary ? colors.primary : 'transparent')};
+  border: ${({ isPrimary }) => (isPrimary ? 'none' : `1px solid ${colors.text}`)};
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px;
+`;
+
+const ButtonText = styled(Text) <{ isPrimary?: boolean }>`
+  font-size: 15px;
+  color: ${({ isPrimary }) => (isPrimary ? colors.background : colors.text)};
+  font-weight: bold;
+`;
 export default LoginScreen;
