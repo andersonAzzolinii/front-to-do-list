@@ -11,7 +11,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   setUser: (user: User | null) => void;
-  signIn: (username: string, password: string) => Promise<void>;
+  signIn: (username: string, password: string) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -38,7 +38,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(data.user)
       await AsyncStorage.setItem('authToken', data.token);
       await AsyncStorage.setItem('user', JSON.stringify(data.user));
-
+      return data
     } else notify('error', data.message, 2000)
 
   }

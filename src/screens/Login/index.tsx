@@ -28,8 +28,8 @@ const LoginScreen = () => {
 
   const onSubmit = async (values: { username: string; password: string }) => {
     try {
-      await signIn(values.username, values.password)
-      return navigation.replace('Home')
+      const logged = await signIn(values.username, values.password)
+      if (logged) navigation.replace('Home')
     } catch (error) {
       console.error(error)
     }
