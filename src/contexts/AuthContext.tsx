@@ -36,12 +36,13 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
   const signIn = async (username: string, password: string) => {
     try {
       const {data} = await login({username, password});
-      if (data.token && data.user) {
+      if (data && data.token && data.user) {
         setUser(data.user);
         await AsyncStorage.setItem('authToken', data.token);
         await AsyncStorage.setItem('user', JSON.stringify(data.user));
         return data;
-      } else notify('error', data.message, 2000);
+      } else
+        notify('error', data?.message || 'Invalid response from server', 2000);
     } catch (error) {
       notify(
         'error',
