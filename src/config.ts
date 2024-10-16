@@ -1,1 +1,1 @@
-export const BASE_URL = 'http://localhost:3000/api';
+export const BASE_URL = 'http://localhost:3000/api'; //if localhost doesn't work, maybe it's necessary use your IP
