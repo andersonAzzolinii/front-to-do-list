@@ -1,6 +1,6 @@
-import React, {createContext, useContext, useState, useEffect} from 'react';
-import {login} from '../services/auth';
-import {useNotification} from './NotificationContext';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { login } from '../services/auth';
+import { useNotification } from './NotificationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface User {
@@ -16,11 +16,11 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  const {notify} = useNotification();
+  const { notify } = useNotification();
 
   useEffect(() => {
     loadUser();
@@ -35,7 +35,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
 
   const signIn = async (username: string, password: string) => {
     try {
-      const {data} = await login({username, password});
+      const { data } = await login({ username, password });
       if (data && data.token && data.user) {
         setUser(data.user);
         await AsyncStorage.setItem('authToken', data.token);
@@ -44,17 +44,13 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({
       } else
         notify('error', data?.message || 'Invalid response from server', 2000);
     } catch (error) {
-      notify(
-        'error',
-        'Server is down or unreachable. Please try again later.',
-        2000,
-      );
+      notify('error', 'Server is down or unreachable. Please try again later.', 2000);
       console.error('Error during login:', error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{user, setUser, signIn}}>
+    <AuthContext.Provider value={{ user, setUser, signIn }}>
       {children}
     </AuthContext.Provider>
   );

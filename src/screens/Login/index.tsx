@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import TextInputWithForm from '../components/TextInputWithForm';
@@ -13,6 +13,7 @@ import { useAuth } from '../../contexts/AuthContext';
 const LoginScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const { signIn } = useAuth()
+  const [loading, setLoading] = useState(false)
   const initialValues = {
     username: '',
     password: '',
@@ -28,10 +29,13 @@ const LoginScreen = () => {
 
   const onSubmit = async (values: { username: string; password: string }) => {
     try {
+      setLoading(true)
       const logged = await signIn(values.username, values.password)
       if (logged) navigation.replace('Home')
     } catch (error) {
       console.error(error)
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -59,7 +63,13 @@ const LoginScreen = () => {
             </InputContainer>
             <View>
               <Button isPrimary onPress={() => handleSubmit()}>
-                <ButtonText isPrimary>Sign</ButtonText>
+                {loading ?
+                  <ActivityIndicator size={25} color='white' />
+                  :
+                  <ButtonText isPrimary>
+                    Sign
+                  </ButtonText>
+                }
               </Button>
               <Button onPress={() => navigation.navigate('CreateUser')}>
                 <ButtonText>Create account</ButtonText>

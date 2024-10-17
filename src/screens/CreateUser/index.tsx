@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import TextInputWithForm from '../components/TextInputWithForm';
@@ -39,6 +39,7 @@ const ButtonText = styled(Text) <{ isPrimary?: boolean }>`
 const CreateScreen = () => {
   const navigation = useNavigation<RootStackNavigationProp>();
   const { notify } = useNotification()
+  const [loading, setLoading] = useState(false)
 
   const initialValues = {
     username: '',
@@ -54,12 +55,19 @@ const CreateScreen = () => {
   });
 
   const onSubmit = async (values: { username: string; password: string }) => {
-    const { data } = await createUser(values)
-    if (data.data) {
-      notify('success', data.message, 2000)
-      return navigation.replace('Login')
+    try {
+      setLoading(true)
+      const { data } = await createUser(values)
+      if (data && data.data) {
+        notify('success', data.message, 2000)
+        return navigation.replace('Login')
+      }
+      notify('error', data.message, 2000)
+    } catch (error) {
+      notify('error', 'Server is down or unreachable. Please try again later.', 2000);
+    } finally {
+      setLoading(false)
     }
-    notify('error', data.message, 2000)
   };
 
   return (
@@ -86,7 +94,12 @@ const CreateScreen = () => {
             </InputContainer>
             <View>
               <Button isPrimary onPress={() => handleSubmit()}>
-                <ButtonText isPrimary>Create account</ButtonText>
+                {
+                  loading ?
+                    <ActivityIndicator size={25} color='white' />
+                    :
+                    <ButtonText isPrimary>Create account</ButtonText>
+                }
               </Button>
             </View>
           </>
